@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictive Text Models Demo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Predictive Text Models Demo</h1>
+        <div class="model" id="predictionForm">
+            <h2>Model 1</h2>
+            <input type="text" id="inputText" placeholder="Enter text for Model 1">
+            <button onclick="getPrediction()">Predict Model 1</button>
+            <div class="results" id="predictionResult">Results will appear here</div>
+        </div>
+        <div class="model" id="model2">
+            <h2>Model 2</h2>
+            <input type="text" id="input2" placeholder="Enter text for Model 2">
+            <button onclick="getPrediction()">Predict Model 2</button>
+            <div class="results" id="results2">Results will appear here</div>
+        </div>
+        <div class="additional-content">
+            <h2>Additional Content</h2>
+        </div>
+
+        <!-- Dataset Section -->
+        <div class="section-container">
+            <h2>Dataset</h2>
+            <p><span>Model 1:</span> The dataset comprises hotel reviews, featuring a mix of textual feedback and ratings. It was cleaned and preprocessed to remove special characters, unnecessary spaces, and to standardize text to lowercase. This preparation helps in simplifying the data for the model to process and learn from effectively.</p>
+            <p><span>Model 2:</span> This dataset comprises a series of excerpts from a classic piece of literature, specifically focusing on the detective genre. The text features a detailed narrative that includes dialogue, descriptions, and the inner thoughts of characters, offering a rich context for natural language processing and understanding. The dataset presents a unique opportunity to explore various aspects of text analysis, including sentiment analysis, character interaction mapping, theme extraction, and stylistic patterns.</p>
+        </div>
+
+        <!-- Model Section -->
+        <div class="section-container">
+            <h2>Model</h2>
+            <p><span>Model 1:</span>The core of our predictive text model is based on a Recurrent Neural Network (RNN) with LSTM (Long Short-Term Memory) layers. This architecture excels in learning patterns from sequential data, making it ideal for text. The model was trained using a compilation of hotel reviews, learning to predict the next character in a sequence based on the preceding ones. It includes embedding layers, LSTM layers, and dense layers with softmax activation to predict a distribution over possible next characters.</p>
+            <p><span>Model 2:</span> </p>
+        </div>
+
+        <!-- Applications Section -->
+        <div class="section-container">
+            <h2>Applications</h2>
+            <p><span>Model 1:</span>This model can be applied in various fields including automated text generation, enhancing autocomplete features in messaging apps, creating chatbots, and generating content for customer service responses. Its ability to predict text makes it versatile for both entertainment and professional settings.</p>
+            <p><span>Model 2:</span>Applications of a model trained on this dataset could range from generating text in a similar style, creating summaries of literary works, to developing tools for educational purposes that aid in the study of literature. The model could also be used to explore narrative predictions, character analysis, and even the generation of new stories within the same genre.</p>
+        </div>
+
+        <!-- Limitations and Future Improvements Section -->
+        <div class="section-container">
+            <h2>Limitations and Future Improvements</h2>
+            <p><span>Model 1:</span>While effective, the current model has limitations, such as occasionally generating irrelevant or repetitive text. Future improvements could include implementing more advanced models like GPT (Generative Pre-trained Transformer), fine-tuning on specific genres of text for better context understanding, and incorporating attention mechanisms to improve relevance and diversity in generated text.</p>
+            <p><span>Model 2:</span>Limitations of the current model might include its potential difficulty in capturing the full depth of literary nuances and the challenge of interpreting the emotional and psychological complexity of characters. Future improvements could involve refining the model to better understand and replicate the stylistic devices used by authors, as well as improving its ability to grasp the subtleties of human emotions and interactions as depicted in literature.</p>
+        </div>
+
+        <!-- Ethical Considerations Section -->
+        <div class="section-container">
+            <h2>Ethical Considerations</h2>
+            <p><span>Model 1:</span>It's important to use predictive text models responsibly, ensuring they don't perpetuate biases or generate harmful content. Regular audits and updates to the training dataset can help minimize biases. Additionally, implementing filters to prevent the generation of inappropriate content is crucial in maintaining ethical standards.</p>
+            <p><span>Model 2:</span>Ethical considerations include ensuring that the model's usage respects copyright laws and the original work's integrity, avoiding the generation of content that could be mistaken for the original author's work, and ensuring that applications of the model do not perpetuate biases or misinterpretations of the text.</p>
+        </div>
+    </div>
+    <script>
+        async function getPrediction() {
+            const inputText = document.getElementById('inputText').value;
+            const response = await fetch('http://127.0.0.1:5000/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({input: inputText}),
+            })
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('predictionResult').innerText = 'Predicted text: ' + data.generated_text;
+            })
+            .catch((error) => {
+                console.error('There was a problem with your fetch operation:', error);
+            });
+        }
+    </script>
+</body>
+</html>
